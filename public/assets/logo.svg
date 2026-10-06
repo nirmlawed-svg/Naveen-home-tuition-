@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="100%" height="100%">
+  <defs>
+    <style>
+      .navy-figure { fill: #07204E; }
+      .royal-figure { fill: #0062E2; }
+      .brand-title {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-weight: 600;
+        fill: #07204E;
+        font-size: 68px;
+        letter-spacing: -0.5px;
+      }
+    </style>
+  </defs>
+
+  <!-- Left Head -->
+  <circle cx="366" cy="285" r="72" class="navy-figure" />
+
+  <!-- Right Head -->
+  <circle cx="658" cy="285" r="72" class="royal-figure" />
+
+  <!-- Left Figure / Student & Book Page -->
+  <path class="navy-figure" d="
+    M 320 370
+    C 320 338 340 328 368 332
+    L 512 414
+    L 512 470
+    L 382 404
+    L 382 480
+    C 424 482 476 508 504 554
+    C 476 538 384 534 320 528
+    Z
+  " />
+
+  <!-- Right Figure / Tutor & Book Page -->
+  <path class="royal-figure" d="
+    M 704 370
+    C 704 338 684 328 656 332
+    L 512 414
+    L 512 470
+    L 642 404
+    L 642 480
+    C 600 482 548 508 520 554
+    C 548 538 640 534 704 528
+    Z
+  " />
+
+  <!-- Brand Typography -->
+  <text x="512" y="700" text-anchor="middle" class="brand-title">Naveen Home tuitions</text>
+</svg>

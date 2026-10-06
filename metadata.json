@@ -1,0 +1,6 @@
+{
+  "name": "Naveen Home Tuitions",
+  "description": "Connect with verified home and online tutors for Classes 1–12 and BTech across Hyderabad. Personalized tutoring in Attapur, Mehdipatnam, Tolichowki, and more.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

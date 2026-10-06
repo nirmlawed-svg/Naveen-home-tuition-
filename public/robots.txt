@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://naveen-home-tuitions.ai.studio/sitemap.xml
