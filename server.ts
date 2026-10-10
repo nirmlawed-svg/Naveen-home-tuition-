@@ -1,4 +1,5 @@
 import express from 'express';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
@@ -13,16 +14,28 @@ import {
   verifyPasswordlessCode,
   validateSessionToken,
   revokeSession,
-} from './src/server/db.js';
+} from './src/server/db.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
+  app.disable('x-powered-by');
   app.use(express.json());
+
+  // CORS and Preflight headers for production deployments
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(200);
+    }
+    next();
+  });
 
   // 1. Public API: Submit an Enquiry (Parent, Tutor, or Contact)
   app.post('/api/enquiries', (req, res) => {
@@ -245,16 +258,28 @@ async function startServer() {
   });
 
   // Serve Frontend
-  if (process.env.NODE_ENV !== 'production') {
+  const isDev = process.env.NODE_ENV === 'development';
+  const distIndex = path.resolve(__dirname, 'dist', 'index.html');
+  const hasDist = fs.existsSync(distIndex);
+
+  if (isDev || !hasDist) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
     });
     app.use(vite.middlewares);
   } else {
-    app.use(express.static(path.resolve(__dirname, 'dist')));
+    const distPath = path.resolve(__dirname, 'dist');
+    app.use(express.static(distPath));
+
+    // Direct route handlers to guarantee zero-404 on page reload
+    app.get(['/admin', '/admin/*', '/about', '/parents', '/tutors', '/how-it-works', '/contact'], (_req, res) => {
+      res.sendFile(distIndex);
+    });
+
+    // SPA catch-all fallback
     app.get('*', (_req, res) => {
-      res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+      res.sendFile(distIndex);
     });
   }
 

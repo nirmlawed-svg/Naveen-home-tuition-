@@ -151,8 +151,12 @@ export function Footer({ onNavigate: e }: { onNavigate: (route: string) => void 
                     }),
                     (0, O.jsx)(`li`, {
                       className: `pt-1 border-t border-slate-800/80`,
-                      children: (0, O.jsx)(`button`, {
-                        onClick: () => t(`/admin`),
+                      children: (0, O.jsx)(`a`, {
+                        href: `/admin`,
+                        onClick: (e: any) => {
+                          e.preventDefault();
+                          t(`/admin`);
+                        },
                         className: `text-slate-300 hover:text-[#155EEF] font-medium transition-colors cursor-pointer flex items-center gap-1.5 py-1 text-sm`,
                         children: `Admin Portal`,
                       }),
@@ -246,8 +250,12 @@ export function Footer({ onNavigate: e }: { onNavigate: (route: string) => void 
                               className: `text-xs font-medium text-slate-300`,
                               children: `Enquiry Management`,
                             }),
-                            (0, O.jsx)(`button`, {
-                              onClick: () => t(`/admin`),
+                            (0, O.jsx)(`a`, {
+                              href: `/admin`,
+                              onClick: (e: any) => {
+                                e.preventDefault();
+                                t(`/admin`);
+                              },
                               className: `text-xs font-semibold text-blue-400 hover:text-blue-300 transition-colors cursor-pointer py-1 px-2 rounded hover:bg-slate-700/60 inline-flex items-center gap-1`,
                               children: `Admin Portal →`,
                             }),
@@ -287,8 +295,12 @@ export function Footer({ onNavigate: e }: { onNavigate: (route: string) => void 
                   ],
                 }),
                 (0, O.jsx)(`span`, { children: `·` }),
-                (0, O.jsx)(`button`, {
-                  onClick: () => t(`/admin`),
+                (0, O.jsx)(`a`, {
+                  href: `/admin`,
+                  onClick: (e: any) => {
+                    e.preventDefault();
+                    t(`/admin`);
+                  },
                   className: `text-slate-500 hover:text-slate-300 transition-colors cursor-pointer text-xs`,
                   children: `Admin Portal`,
                 }),

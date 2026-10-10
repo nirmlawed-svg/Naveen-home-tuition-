@@ -158,9 +158,16 @@ function loadEnquiries(): Enquiry[] {
 
 function saveEnquiries(enquiries: Enquiry[]): void {
   enquiriesCache = enquiries;
-  const tempPath = `${ENQUIRIES_FILE}.tmp.${Date.now()}`;
-  fs.writeFileSync(tempPath, JSON.stringify(enquiries, null, 2), 'utf8');
-  fs.renameSync(tempPath, ENQUIRIES_FILE);
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    const tempPath = `${ENQUIRIES_FILE}.tmp.${Date.now()}`;
+    fs.writeFileSync(tempPath, JSON.stringify(enquiries, null, 2), 'utf8');
+    fs.renameSync(tempPath, ENQUIRIES_FILE);
+  } catch (err) {
+    console.warn('Warning: Could not write enquiries to filesystem, keeping in memory cache:', err);
+  }
 }
 
 // Session store
@@ -184,9 +191,16 @@ function loadSessions(): Record<string, AdminSession> {
 
 function saveSessions(sessions: Record<string, AdminSession>): void {
   sessionsCache = sessions;
-  const tempPath = `${SESSIONS_FILE}.tmp.${Date.now()}`;
-  fs.writeFileSync(tempPath, JSON.stringify(sessions, null, 2), 'utf8');
-  fs.renameSync(tempPath, SESSIONS_FILE);
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    const tempPath = `${SESSIONS_FILE}.tmp.${Date.now()}`;
+    fs.writeFileSync(tempPath, JSON.stringify(sessions, null, 2), 'utf8');
+    fs.renameSync(tempPath, SESSIONS_FILE);
+  } catch (err) {
+    console.warn('Warning: Could not write sessions to filesystem, keeping in memory cache:', err);
+  }
 }
 
 // Pending OTPs map

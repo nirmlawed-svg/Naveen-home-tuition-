@@ -89,26 +89,60 @@ function SeoManager({ route }: { route: string }) {
   return null;
 }
 
+export function parseCurrentRoute(): string {
+  if (typeof window === 'undefined') return '/';
+
+  // 1. Normalized pathname (lowercase, trimmed, strip trailing slashes)
+  const rawPath = window.location.pathname.toLowerCase().trim();
+  const normalized = rawPath.replace(/\/+$/, '') || '/';
+
+  const validRoutes = ['/about', '/parents', '/tutors', '/how-it-works', '/contact', '/admin'];
+  for (const r of validRoutes) {
+    if (normalized === r || normalized.endsWith(r)) {
+      return r;
+    }
+  }
+
+  // 2. Query parameters fallback (?page=admin, ?tab=admin, ?admin, etc.)
+  const search = window.location.search.toLowerCase();
+  const params = new URLSearchParams(window.location.search);
+  const pageParam = (params.get('page') || params.get('route') || params.get('tab') || '').toLowerCase();
+  for (const r of validRoutes) {
+    const rKey = r.replace('/', '');
+    if (pageParam === rKey || pageParam === r) {
+      return r;
+    }
+  }
+  if (params.has('admin') || search.includes('admin')) {
+    return '/admin';
+  }
+
+  // 3. Hash routing fallback (#/admin, #admin, #about, etc.)
+  const rawHash = (window.location.hash || '').toLowerCase().replace(/^#\/?/, '').replace(/\/+$/, '');
+  for (const r of validRoutes) {
+    const rKey = r.replace('/', '');
+    if (rawHash === rKey || rawHash === r) {
+      return r;
+    }
+  }
+
+  return '/';
+}
+
 export default function App() {
-  const [currentRoute, setCurrentRoute] = useState<string>(() => {
-    if (typeof window === 'undefined') return '/';
-    const path = window.location.pathname;
-    return ['/', '/about', '/parents', '/tutors', '/how-it-works', '/contact', '/admin'].includes(path)
-      ? path
-      : '/';
-  });
+  const [currentRoute, setCurrentRoute] = useState<string>(() => parseCurrentRoute());
 
   useEffect(() => {
-    const handlePopState = () => {
-      const path = window.location.pathname;
-      setCurrentRoute(
-        ['/', '/about', '/parents', '/tutors', '/how-it-works', '/contact', '/admin'].includes(path)
-          ? path
-          : '/'
-      );
+    const handleLocationChange = () => {
+      setCurrentRoute(parseCurrentRoute());
     };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
   }, []);
 
   const navigate = (newRoute: string) => {

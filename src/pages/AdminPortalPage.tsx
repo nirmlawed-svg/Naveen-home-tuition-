@@ -89,6 +89,8 @@ export function AdminPortalPage({ onNavigate }: AdminPortalPageProps) {
   const [notesInput, setNotesInput] = useState<string>('');
   const [savingNotes, setSavingNotes] = useState<boolean>(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [modalActionError, setModalActionError] = useState<string | null>(null);
+  const [modalActionSuccess, setModalActionSuccess] = useState<string | null>(null);
 
   // Verify stored token on mount
   useEffect(() => {
@@ -106,13 +108,17 @@ export function AdminPortalPage({ onNavigate }: AdminPortalPageProps) {
           const data = await res.json();
           setAdminEmail(data.email || 'Admin');
           loadDashboardData(token);
-        } else {
+        } else if (res.status === 401 || res.status === 403) {
           localStorage.removeItem('nht_admin_token');
           setToken(null);
+        } else {
+          // Temporary server/proxy response: keep token and attempt dashboard fetch
+          loadDashboardData(token);
         }
-      } catch {
-        localStorage.removeItem('nht_admin_token');
-        setToken(null);
+      } catch (err) {
+        // Transient network issue: do not wipe token immediately
+        console.warn('Network issue checking admin session:', err);
+        loadDashboardData(token);
       } finally {
         setIsCheckingAuth(false);
       }
@@ -223,11 +229,14 @@ export function AdminPortalPage({ onNavigate }: AdminPortalPageProps) {
       if (selectedEnquiry && selectedEnquiry.id === enquiryId) {
         setSelectedEnquiry(updated);
       }
+      setModalActionSuccess(`Status updated to "${newStatus}"`);
+      setTimeout(() => setModalActionSuccess(null), 3000);
 
       // Re-fetch stats
       loadDashboardData(token);
     } catch (err: any) {
-      alert(err.message || 'Failed to update status.');
+      setModalActionError(err.message || 'Failed to update status.');
+      setTimeout(() => setModalActionError(null), 4000);
     } finally {
       setUpdatingStatus(false);
     }
@@ -237,6 +246,7 @@ export function AdminPortalPage({ onNavigate }: AdminPortalPageProps) {
   const handleSaveNotes = async () => {
     if (!token || !selectedEnquiry) return;
     setSavingNotes(true);
+    setModalActionError(null);
     try {
       const res = await fetch(`/api/admin/enquiries/${selectedEnquiry.id}`, {
         method: 'PATCH',
@@ -254,8 +264,11 @@ export function AdminPortalPage({ onNavigate }: AdminPortalPageProps) {
 
       setEnquiries((prev) => prev.map((item) => (item.id === selectedEnquiry.id ? updated : item)));
       setSelectedEnquiry(updated);
+      setModalActionSuccess('Coordinator notes saved successfully.');
+      setTimeout(() => setModalActionSuccess(null), 3000);
     } catch (err: any) {
-      alert(err.message || 'Failed to save notes.');
+      setModalActionError(err.message || 'Failed to save notes.');
+      setTimeout(() => setModalActionError(null), 4000);
     } finally {
       setSavingNotes(false);
     }
@@ -948,6 +961,20 @@ export function AdminPortalPage({ onNavigate }: AdminPortalPageProps) {
 
             {/* Modal Body */}
             <div className="p-5 sm:p-6 overflow-y-auto space-y-6 flex-1 text-xs sm:text-sm">
+              {/* Feedback messages */}
+              {modalActionError && (
+                <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                  <span>{modalActionError}</span>
+                </div>
+              )}
+              {modalActionSuccess && (
+                <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+                  <span>{modalActionSuccess}</span>
+                </div>
+              )}
+
               {/* Quick Actions & Status Control Bar */}
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
