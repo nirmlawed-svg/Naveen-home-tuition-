@@ -22,6 +22,7 @@ import {
 import { WhatsAppButton as ft } from "../components/WhatsAppButton";
 
 export function ContactPage({ onNavigate: e }: { onNavigate: (route: string) => void }) {
+  const [submitting, setSubmitting] = useState(false);
   const [t, n] = useState<Record<string, string>>({ name: ``, phone: ``, email: ``, message: `` });
   const [r, i] = useState<Record<string, string>>({});
   const [a, o] = useState<string | null>(null);
@@ -252,7 +253,7 @@ export function ContactPage({ onNavigate: e }: { onNavigate: (route: string) => 
                     }),
                     (0, O.jsx)(`p`, {
                       className: `text-xs sm:text-sm text-[#667085] mt-1`,
-                      children: `Fill out the form below to send your enquiry directly to +91 95052 03418 on WhatsApp.`,
+                      children: `Fill out the form below to send your enquiry directly to our team.`,
                     }),
                   ],
                 }),
@@ -268,55 +269,62 @@ export function ContactPage({ onNavigate: e }: { onNavigate: (route: string) => 
                         }),
                         (0, O.jsx)(`h3`, {
                           className: `text-xl font-bold text-[#101828]`,
-                          children: `WhatsApp Ready!`,
+                          children: `Thank you! Your message has been submitted successfully.`,
                         }),
-                        (0, O.jsx)(`p`, {
-                          className: `text-xs sm:text-sm text-[#667085] max-w-md mx-auto`,
-                          children: `Your message has been encoded. If WhatsApp didn't open automatically, tap below:`,
-                        }),
-                        (0, O.jsxs)(`div`, {
-                          className: `pt-2 flex flex-col sm:flex-row justify-center gap-3`,
+                        (0, O.jsxs)(`p`, {
+                          className: `text-xs sm:text-sm text-[#667085] max-w-md mx-auto leading-relaxed`,
                           children: [
-                            (0, O.jsxs)(`a`, {
-                              href: a,
-                              target: `_blank`,
-                              rel: `noopener noreferrer`,
-                              className: `px-5 py-3 rounded-xl bg-[#12B76A] text-white text-xs font-semibold hover:bg-[#0e9657] transition-colors inline-flex items-center justify-center gap-1.5 shadow-sm`,
-                              children: [
-                                (0, O.jsx)(E, {
-                                  className: `w-4 h-4 fill-white text-[#12B76A]`,
-                                }),
-                                (0, O.jsx)(`span`, {
-                                  children: `Open WhatsApp (+91 95052 03418)`,
-                                }),
-                                (0, O.jsx)(Se, {
-                                  className: `w-3.5 h-3.5 ml-1`,
-                                }),
-                              ],
+                            `Your inquiry has been stored securely in our database with Reference ID: `,
+                            (0, O.jsx)(`span`, {
+                              className: `font-mono font-bold text-[#155EEF]`,
+                              children: a,
                             }),
-                            (0, O.jsx)(`button`, {
-                              onClick: () => {
-                                (o(null),
-                                  n({
-                                    name: ``,
-                                    phone: ``,
-                                    email: ``,
-                                    message: ``,
-                                  }),
-                                  i({}));
-                              },
-                              className: `px-5 py-3 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors cursor-pointer`,
-                              children: `Write Another Message`,
-                            }),
+                            `. Our academic coordinator will contact you promptly.`,
                           ],
+                        }),
+                        (0, O.jsx)(`div`, {
+                          className: `pt-2 flex justify-center`,
+                          children: (0, O.jsx)(`button`, {
+                            onClick: () => {
+                              (o(null),
+                                n({
+                                  name: ``,
+                                  phone: ``,
+                                  email: ``,
+                                  message: ``,
+                                }),
+                                i({}));
+                            },
+                            className: `px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors cursor-pointer`,
+                            children: `Send Another Message`,
+                          }),
                         }),
                       ],
                     })
                   : (0, O.jsxs)(`form`, {
-                      onSubmit: (e) => {
-                        if ((e.preventDefault(), !c())) return;
-                        let n = g(t);
-                        (o(n), window.open(n, `_blank`, `noopener,noreferrer`));
+                      onSubmit: async (e) => {
+                        e.preventDefault();
+                        if (!c()) return;
+                        setSubmitting(true);
+                        try {
+                          const res = await fetch('/api/enquiries', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ category: 'contact', data: t }),
+                          });
+                          const resData = await res.json();
+                          if (!res.ok) {
+                            throw new Error(resData.error || 'Failed to submit contact enquiry.');
+                          }
+                          o(resData.id || 'SUBMITTED');
+                        } catch (err: any) {
+                          i((prev) => ({
+                            ...prev,
+                            form: err.message || 'Failed to send message. Please check your connection and retry.',
+                          }));
+                        } finally {
+                          setSubmitting(false);
+                        }
                       },
                       className: `space-y-4`,
                       noValidate: !0,
@@ -449,12 +457,12 @@ export function ContactPage({ onNavigate: e }: { onNavigate: (route: string) => 
                           className: `pt-2`,
                           children: (0, O.jsxs)(`button`, {
                             type: `submit`,
-                            className: `w-full sm:w-auto px-8 py-3 rounded-xl bg-[#155EEF] hover:bg-[#104ec6] text-white text-sm font-semibold transition-all duration-150 cursor-pointer shadow-xs active:scale-[0.98] flex items-center justify-center gap-2`,
+                            disabled: submitting,
+                            className: `w-full sm:w-auto px-8 py-3 rounded-xl bg-[#155EEF] hover:bg-[#104ec6] text-white text-sm font-semibold transition-all duration-150 cursor-pointer shadow-xs active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed`,
                             children: [
-                              (0, O.jsx)(E, {
-                                className: `w-4 h-4 fill-white text-[#155EEF]`,
-                              }),
-                              (0, O.jsx)(`span`, { children: `Send Message` }),
+                              submitting
+                                ? (0, O.jsx)(`span`, { children: `Sending Message...` })
+                                : (0, O.jsx)(`span`, { children: `Send Message` }),
                             ],
                           }),
                         }),

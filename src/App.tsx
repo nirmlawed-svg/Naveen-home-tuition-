@@ -9,6 +9,7 @@ import { ParentsPage } from './pages/ParentsPage';
 import { TutorsPage } from './pages/TutorsPage';
 import { HowItWorksPage } from './pages/HowItWorksPage';
 import { ContactPage } from './pages/ContactPage';
+import { AdminPortalPage } from './pages/AdminPortalPage';
 
 function SeoManager({ route }: { route: string }) {
   useEffect(() => {
@@ -92,7 +93,7 @@ export default function App() {
   const [currentRoute, setCurrentRoute] = useState<string>(() => {
     if (typeof window === 'undefined') return '/';
     const path = window.location.pathname;
-    return ['/', '/about', '/parents', '/tutors', '/how-it-works', '/contact'].includes(path)
+    return ['/', '/about', '/parents', '/tutors', '/how-it-works', '/contact', '/admin'].includes(path)
       ? path
       : '/';
   });
@@ -101,7 +102,7 @@ export default function App() {
     const handlePopState = () => {
       const path = window.location.pathname;
       setCurrentRoute(
-        ['/', '/about', '/parents', '/tutors', '/how-it-works', '/contact'].includes(path)
+        ['/', '/about', '/parents', '/tutors', '/how-it-works', '/contact', '/admin'].includes(path)
           ? path
           : '/'
       );
@@ -117,6 +118,15 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
+
+  if (currentRoute === '/admin') {
+    return (
+      <div className="min-h-screen bg-[#F8FAFC]">
+        <SeoManager route="/admin" />
+        <AdminPortalPage onNavigate={navigate} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#101828] selection:bg-blue-100 selection:text-blue-900">

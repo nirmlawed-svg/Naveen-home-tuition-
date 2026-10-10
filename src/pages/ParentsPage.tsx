@@ -22,6 +22,7 @@ import {
 import { WhatsAppButton as ft } from "../components/WhatsAppButton";
 
 export function ParentsPage({ onNavigate: e }: { onNavigate: (route: string) => void }) {
+  const [submitting, setSubmitting] = useState(false);
   const [t, n] = useState<Record<string, string>>({
     parentName: ``,
     mobileNumber: ``,
@@ -157,17 +158,17 @@ export function ParentsPage({ onNavigate: e }: { onNavigate: (route: string) => 
                 }),
                 (0, O.jsx)(`h2`, {
                   className: `text-2xl sm:text-3xl font-bold text-[#101828] mb-2`,
-                  children: `Opening WhatsApp with Your Details`,
+                  children: `Thank you! Your information has been submitted successfully.`,
                 }),
                 (0, O.jsxs)(`p`, {
                   className: `text-sm sm:text-base text-[#667085] mb-6`,
                   children: [
-                    `Your tuition requirement has been validated and prepared for `,
+                    `Your requirement has been saved in our secure database with Reference ID: `,
                     (0, O.jsx)(`span`, {
-                      className: `font-semibold text-slate-800`,
-                      children: `+91 95052 03418`,
+                      className: `font-mono font-bold text-[#155EEF]`,
+                      children: a,
                     }),
-                    `.`,
+                    `. Our academic coordinator will review your request and contact you directly.`,
                   ],
                 }),
                 (0, O.jsxs)(`div`, {
@@ -175,26 +176,11 @@ export function ParentsPage({ onNavigate: e }: { onNavigate: (route: string) => 
                   children: [
                     (0, O.jsx)(`div`, {
                       className: `text-xs font-bold text-emerald-900 mb-1`,
-                      children: `WhatsApp Action:`,
+                      children: `Enquiry Status: Saved & Active`,
                     }),
                     (0, O.jsx)(`p`, {
-                      className: `text-xs text-emerald-800 mb-4 leading-relaxed`,
-                      children: `If WhatsApp didn't open automatically in your browser or app, tap the green button below to send your tuition details directly:`,
-                    }),
-                    (0, O.jsxs)(`a`, {
-                      href: a,
-                      target: `_blank`,
-                      rel: `noopener noreferrer`,
-                      className: `w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#12B76A] hover:bg-[#0e9657] text-white text-sm font-semibold transition-all active:scale-[0.98] shadow-sm`,
-                      children: [
-                        (0, O.jsx)(E, {
-                          className: `w-5 h-5 fill-white text-[#12B76A]`,
-                        }),
-                        (0, O.jsx)(`span`, {
-                          children: `Open WhatsApp Now (+91 95052 03418)`,
-                        }),
-                        (0, O.jsx)(Se, { className: `w-4 h-4 ml-1` }),
-                      ],
+                      className: `text-xs text-emerald-800 leading-relaxed`,
+                      children: `Your tuition requirement is stored in our coordinator portal. We match qualified home and online tutors based on your child's class, board, subjects, and locality in Hyderabad.`,
                     }),
                   ],
                 }),
@@ -203,7 +189,7 @@ export function ParentsPage({ onNavigate: e }: { onNavigate: (route: string) => 
                   children: [
                     (0, O.jsx)(`div`, {
                       className: `text-xs font-semibold text-slate-700 mb-2`,
-                      children: `Details Formatted for WhatsApp:`,
+                      children: `Submitted Requirement Details:`,
                     }),
                     (0, O.jsxs)(`div`, {
                       className: `text-xs text-slate-600 space-y-1`,
@@ -347,7 +333,7 @@ export function ParentsPage({ onNavigate: e }: { onNavigate: (route: string) => 
                               className: `text-red-500 font-bold`,
                               children: `*`,
                             }),
-                            `) are required. Your details will be sent directly via WhatsApp to our coordinator.`,
+                            `) are required. Your requirement will be saved securely for our academic coordinator.`,
                           ],
                         }),
                       ],
@@ -363,8 +349,9 @@ export function ParentsPage({ onNavigate: e }: { onNavigate: (route: string) => 
                         ],
                       }),
                     (0, O.jsxs)(`form`, {
-                      onSubmit: (e) => {
-                        if ((e.preventDefault(), !d())) {
+                      onSubmit: async (e) => {
+                        e.preventDefault();
+                        if (!d()) {
                           document
                             .querySelector(`.border-red-500`)
                             ?.scrollIntoView({
@@ -373,10 +360,27 @@ export function ParentsPage({ onNavigate: e }: { onNavigate: (route: string) => 
                             });
                           return;
                         }
-                        let n = m(t);
-                        (o(n),
-                          window.open(n, `_blank`, `noopener,noreferrer`),
-                          window.scrollTo({ top: 0, behavior: `smooth` }));
+                        setSubmitting(true);
+                        try {
+                          const res = await fetch('/api/enquiries', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ category: 'parent', data: t }),
+                          });
+                          const resData = await res.json();
+                          if (!res.ok) {
+                            throw new Error(resData.error || 'Failed to submit enquiry.');
+                          }
+                          o(resData.id || 'SUBMITTED');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } catch (err: any) {
+                          i((prev) => ({
+                            ...prev,
+                            form: err.message || 'Failed to save requirement. Please check your connection and retry.',
+                          }));
+                        } finally {
+                          setSubmitting(false);
+                        }
                       },
                       className: `space-y-6`,
                       noValidate: !0,
@@ -806,17 +810,18 @@ export function ParentsPage({ onNavigate: e }: { onNavigate: (route: string) => 
                           children: [
                             (0, O.jsx)(`p`, {
                               className: `text-xs text-slate-500`,
-                              children: `Submitting opens WhatsApp with your details to +91 95052 03418.`,
+                              children: `Your requirement is saved securely to our database for our academic coordinator.`,
                             }),
                             (0, O.jsxs)(`button`, {
                               type: `submit`,
-                              className: `w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#155EEF] hover:bg-[#104ec6] text-white text-sm font-semibold transition-all duration-150 cursor-pointer shadow-xs active:scale-[0.98] flex items-center justify-center gap-2`,
+                              disabled: submitting,
+                              className: `w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#155EEF] hover:bg-[#104ec6] text-white text-sm font-semibold transition-all duration-150 cursor-pointer shadow-xs active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-60`,
                               children: [
-                                (0, O.jsx)(E, {
-                                  className: `w-4 h-4 fill-white text-[#155EEF]`,
+                                (0, O.jsx)(fe, {
+                                  className: `w-4 h-4 text-white`,
                                 }),
                                 (0, O.jsx)(`span`, {
-                                  children: `Submit Tuition Requirement`,
+                                  children: submitting ? `Saving Requirement...` : `Submit Tuition Requirement`,
                                 }),
                               ],
                             }),

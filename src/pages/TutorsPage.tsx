@@ -22,6 +22,7 @@ import {
 import { WhatsAppButton as ft } from "../components/WhatsAppButton";
 
 export function TutorsPage({ onNavigate: e }: { onNavigate: (route: string) => void }) {
+  const [submitting, setSubmitting] = useState(false);
   const [t, n] = useState<Record<string, string>>({
     fullName: ``,
     mobileNumber: ``,
@@ -187,17 +188,17 @@ export function TutorsPage({ onNavigate: e }: { onNavigate: (route: string) => v
                 }),
                 (0, O.jsx)(`h2`, {
                   className: `text-2xl sm:text-3xl font-bold text-[#101828] mb-2`,
-                  children: `Opening WhatsApp with Tutor Profile`,
+                  children: `Thank you! Your information has been submitted successfully.`,
                 }),
                 (0, O.jsxs)(`p`, {
                   className: `text-sm sm:text-base text-[#667085] mb-6`,
                   children: [
-                    `Your tutor registration details have been prepared for `,
+                    `Your tutor application has been saved in our database with Reference ID: `,
                     (0, O.jsx)(`span`, {
-                      className: `font-semibold text-slate-800`,
-                      children: `+91 95052 03418`,
+                      className: `font-mono font-bold text-[#12B76A]`,
+                      children: a,
                     }),
-                    `.`,
+                    `. Our team will review your qualifications and contact you when matching inquiries arise.`,
                   ],
                 }),
                 (0, O.jsxs)(`div`, {
@@ -205,26 +206,11 @@ export function TutorsPage({ onNavigate: e }: { onNavigate: (route: string) => v
                   children: [
                     (0, O.jsx)(`div`, {
                       className: `text-xs font-bold text-emerald-900 mb-1`,
-                      children: `WhatsApp Action:`,
+                      children: `Profile Status: Registered & Under Review`,
                     }),
                     (0, O.jsx)(`p`, {
-                      className: `text-xs text-emerald-800 mb-4 leading-relaxed`,
-                      children: `If WhatsApp didn't open automatically, tap the button below to send your profile details to our coordinator:`,
-                    }),
-                    (0, O.jsxs)(`a`, {
-                      href: a,
-                      target: `_blank`,
-                      rel: `noopener noreferrer`,
-                      className: `w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#12B76A] hover:bg-[#0e9657] text-white text-sm font-semibold transition-all active:scale-[0.98] shadow-sm`,
-                      children: [
-                        (0, O.jsx)(E, {
-                          className: `w-5 h-5 fill-white text-[#12B76A]`,
-                        }),
-                        (0, O.jsx)(`span`, {
-                          children: `Open WhatsApp Now (+91 95052 03418)`,
-                        }),
-                        (0, O.jsx)(Se, { className: `w-4 h-4 ml-1` }),
-                      ],
+                      className: `text-xs text-emerald-800 leading-relaxed`,
+                      children: `Your tutor profile is stored in our database. We connect qualified educators with parent inquiries matching your teaching subjects, travel locations, and time slots in Hyderabad.`,
                     }),
                   ],
                 }),
@@ -314,8 +300,9 @@ export function TutorsPage({ onNavigate: e }: { onNavigate: (route: string) => v
                         ],
                       }),
                     (0, O.jsxs)(`form`, {
-                      onSubmit: (e) => {
-                        if ((e.preventDefault(), !u())) {
+                      onSubmit: async (e) => {
+                        e.preventDefault();
+                        if (!u()) {
                           document
                             .querySelector(`.border-red-500`)
                             ?.scrollIntoView({
@@ -324,10 +311,27 @@ export function TutorsPage({ onNavigate: e }: { onNavigate: (route: string) => v
                             });
                           return;
                         }
-                        let n = h(t);
-                        (o(n),
-                          window.open(n, `_blank`, `noopener,noreferrer`),
-                          window.scrollTo({ top: 0, behavior: `smooth` }));
+                        setSubmitting(true);
+                        try {
+                          const res = await fetch('/api/enquiries', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ category: 'tutor', data: t }),
+                          });
+                          const resData = await res.json();
+                          if (!res.ok) {
+                            throw new Error(resData.error || 'Failed to submit tutor application.');
+                          }
+                          o(resData.id || 'SUBMITTED');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } catch (err: any) {
+                          i((prev) => ({
+                            ...prev,
+                            form: err.message || 'Failed to save application. Please check your connection and retry.',
+                          }));
+                        } finally {
+                          setSubmitting(false);
+                        }
                       },
                       className: `space-y-6`,
                       noValidate: !0,
@@ -761,18 +765,18 @@ export function TutorsPage({ onNavigate: e }: { onNavigate: (route: string) => v
                           children: [
                             (0, O.jsx)(`p`, {
                               className: `text-xs text-slate-500`,
-                              children: `Submitting opens WhatsApp with your details to +91 95052 03418.`,
+                              children: `Your profile will be saved securely in our tutor coordinator database.`,
                             }),
                             (0, O.jsxs)(`button`, {
                               type: `submit`,
-                              className: `w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#12B76A] hover:bg-[#0e9657] text-white text-sm font-semibold transition-all duration-150 cursor-pointer shadow-xs active:scale-[0.98] flex items-center justify-center gap-2`,
+                              disabled: submitting,
+                              className: `w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#12B76A] hover:bg-[#0e9657] text-white text-sm font-semibold transition-all duration-150 cursor-pointer shadow-xs active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed`,
                               children: [
-                                (0, O.jsx)(E, {
-                                  className: `w-4 h-4 fill-white text-[#12B76A]`,
-                                }),
-                                (0, O.jsx)(`span`, {
-                                  children: `Register as Tutor`,
-                                }),
+                                submitting
+                                  ? (0, O.jsx)(`span`, { children: `Saving Application...` })
+                                  : (0, O.jsx)(`span`, {
+                                      children: `Register as Tutor`,
+                                    }),
                               ],
                             }),
                           ],

@@ -329,4 +329,10 @@ export const routeMetadata: Record<
     canonical: 'https://naveen-home-tuitions.ai.studio/contact',
     h1: 'Contact Naveen Home Tuitions Hyderabad',
   },
+  '/admin': {
+    title: 'Admin Portal | Naveen Home Tuitions',
+    description: 'Secure administrator access for Naveen Home Tuitions enquiry management.',
+    canonical: 'https://naveen-home-tuitions.ai.studio/admin',
+    h1: 'Naveen Home Tuitions Admin Portal',
+  },
 };

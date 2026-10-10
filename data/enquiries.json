@@ -1,0 +1,89 @@
+[
+  {
+    "id": "PAR-20261010-6655",
+    "category": "parent",
+    "status": "New",
+    "createdAt": "2026-10-10T11:05:52.870Z",
+    "createdAtIST": "10 Oct 2026, 04:35:52 pm IST",
+    "updatedAt": "2026-10-10T11:05:52.870Z",
+    "updatedAtIST": "10 Oct 2026, 04:35:52 pm IST",
+    "notes": "",
+    "data": {
+      "parentName": "Lakshmi Narayana",
+      "mobileNumber": "9849012345",
+      "whatsappNumber": "9849012345",
+      "studentName": "Ananya",
+      "studentClass": "Class 10",
+      "board": "CBSE",
+      "subjectRequired": "Mathematics, Physics",
+      "tuitionMode": "Home Tuition",
+      "preferredLocation": "Attapur, Hyderabad",
+      "additionalRequirements": "Board exam preparation"
+    }
+  },
+  {
+    "id": "PAR-20261009-8421",
+    "category": "parent",
+    "status": "New",
+    "createdAt": "2026-10-10T07:05:52.812Z",
+    "createdAtIST": "10 Oct 2026, 12:35:52 pm IST",
+    "updatedAt": "2026-10-10T07:05:52.868Z",
+    "updatedAtIST": "10 Oct 2026, 12:35:52 pm IST",
+    "notes": "Parent requested home tutor for Class 10 CBSE Maths & Science near Pillar 120.",
+    "data": {
+      "parentName": "Ramesh Varma",
+      "mobileNumber": "9848022334",
+      "whatsappNumber": "9848022334",
+      "studentName": "Aditya Varma",
+      "studentClass": "Class 10",
+      "board": "CBSE",
+      "subjectRequired": "Mathematics, Science (Physics/Chem/Bio)",
+      "tuitionMode": "Home",
+      "preferredLocation": "Attapur, Hyderabad",
+      "additionalRequirements": "Evening slot 6:00 PM to 7:30 PM, focus on upcoming board exams."
+    }
+  },
+  {
+    "id": "TUT-20261008-5912",
+    "category": "tutor",
+    "status": "Contacted",
+    "createdAt": "2026-10-08T11:05:52.868Z",
+    "createdAtIST": "08 Oct 2026, 04:35:52 pm IST",
+    "updatedAt": "2026-10-09T11:05:52.869Z",
+    "updatedAtIST": "09 Oct 2026, 04:35:52 pm IST",
+    "notes": "Contacted tutor. Available for Attapur and Mehdipatnam home tuitions.",
+    "data": {
+      "fullName": "K. Sai Krishna",
+      "mobileNumber": "9505298712",
+      "whatsappNumber": "9505298712",
+      "email": "saikrishna.tutor@gmail.com",
+      "highestQualification": "M.Sc. Mathematics, B.Ed",
+      "teachingExperience": "3 to 5 Years",
+      "subjects": "Mathematics, Physics",
+      "classesYouTeach": "Class 9, Class 10, Class 11, Class 12",
+      "boards": "CBSE, SSC, ICSE",
+      "languagesKnown": "English, Telugu, Hindi",
+      "areasYouCanTravelTo": "Attapur, Mehdipatnam, Tolichowki, Upperpally",
+      "teachingMode": "Both",
+      "expectedFee": "₹600 / hour",
+      "availability": "Weekdays after 5 PM, Weekends full day",
+      "additionalInformation": "Have helped students score 95+ in Class 10 CBSE boards."
+    }
+  },
+  {
+    "id": "CNT-20261007-3104",
+    "category": "contact",
+    "status": "In Progress",
+    "createdAt": "2026-10-07T11:05:52.869Z",
+    "createdAtIST": "07 Oct 2026, 04:35:52 pm IST",
+    "updatedAt": "2026-10-08T11:05:52.869Z",
+    "updatedAtIST": "08 Oct 2026, 04:35:52 pm IST",
+    "notes": "Enquiry regarding BTech 2nd year Engineering Mathematics tuition.",
+    "data": {
+      "name": "Mohammed Farhan",
+      "phone": "9700123456",
+      "email": "farhan.m@gmail.com",
+      "message": "Looking for a qualified tutor for BTech M2 (Linear Algebra & Calculus) in Tolichowki area."
+    }
+  }
+]
