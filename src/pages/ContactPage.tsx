@@ -20,6 +20,7 @@ import {
   Ge, Ke, qe
 } from "../components/icons";
 import { WhatsAppButton as ft } from "../components/WhatsAppButton";
+import { submitEnquiry } from "../data/enquiriesDb";
 
 export function ContactPage({ onNavigate: e }: { onNavigate: (route: string) => void }) {
   const [submitting, setSubmitting] = useState(false);
@@ -307,16 +308,8 @@ export function ContactPage({ onNavigate: e }: { onNavigate: (route: string) => 
                         if (!c()) return;
                         setSubmitting(true);
                         try {
-                          const res = await fetch('/api/enquiries', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ category: 'contact', data: t }),
-                          });
-                          const resData = await res.json();
-                          if (!res.ok) {
-                            throw new Error(resData.error || 'Failed to submit contact enquiry.');
-                          }
-                          o(resData.id || 'SUBMITTED');
+                          const res = await submitEnquiry('contact', t);
+                          o(res.id || 'SUBMITTED');
                         } catch (err: any) {
                           i((prev) => ({
                             ...prev,
