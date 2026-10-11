@@ -26,14 +26,14 @@ export function Hero({ onNavigate }: HeroProps) {
         </div>
 
         {/* Main Heading with premium typography hierarchy */}
-        <h1 className="tracking-tight text-center leading-[1.12]">
-          <span className="block text-4xl sm:text-6xl lg:text-7xl font-extrabold text-[#0A369D]">
+        <h1 className="tracking-tight text-center leading-[1.12] flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+          <span className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-[#0A369D]">
             Naveen
           </span>
-          <span className="inline-block text-3xl sm:text-5xl lg:text-6xl font-bold text-[#0A369D] mt-1 mr-2 sm:mr-3">
+          <span className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-[#0A369D]">
             Home
           </span>
-          <span className="inline-block text-3xl sm:text-5xl lg:text-6xl font-serif italic font-bold text-[#0A369D] mt-1">
+          <span className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-[#0A369D]">
             Tuitions
           </span>
         </h1>
