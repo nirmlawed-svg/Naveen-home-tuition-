@@ -24,7 +24,6 @@ export function HomePage({ onNavigate }: { onNavigate: (route: string) => void }
       <TeachingModes onNavigate={onNavigate} />
       <Process onNavigate={onNavigate} />
       <TutorQualifications onNavigate={onNavigate} />
-      <Testimonials />
       <FAQ />
       <BottomCTA onNavigate={onNavigate} />
     </main>

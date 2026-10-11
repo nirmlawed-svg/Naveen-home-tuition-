@@ -26,23 +26,6 @@ export function Testimonials() {
     children: (0, O.jsxs)(`div`, {
       className: `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`,
       children: [
-        (0, O.jsxs)(`div`, {
-          className: `text-center max-w-3xl mx-auto mb-12 sm:mb-16`,
-          children: [
-            (0, O.jsx)(`span`, {
-              className: `text-xs font-semibold uppercase tracking-wider text-[#155EEF] bg-blue-50 border border-blue-100 px-3 py-1 rounded-full`,
-              children: `Real Community Experiences`,
-            }),
-            (0, O.jsx)(`h2`, {
-              className: `text-2xl sm:text-3xl lg:text-4xl font-black uppercase text-[#101828] mt-3 tracking-wide`,
-              children: `TESTNIMIONLS`,
-            }),
-            (0, O.jsx)(`p`, {
-              className: `text-sm sm:text-base text-[#667085] mt-2.5`,
-              children: `Hear from parents and educators across Hyderabad about their one-on-one learning and teaching experiences.`,
-            }),
-          ],
-        }),
         (0, O.jsx)(`div`, {
           className: `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6`,
           children: [

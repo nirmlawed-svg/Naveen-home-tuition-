@@ -82,8 +82,8 @@ export function FAQ() {
               ],
             }),
             (0, O.jsx)(`h2`, {
-              className: `text-2xl sm:text-3xl lg:text-4xl font-bold text-[#101828] tracking-tight`,
-              children: `Google Reviews`,
+              className: `text-2xl sm:text-3xl lg:text-4xl font-black uppercase text-[#101828] tracking-tight`,
+              children: `TESTNIMIONLS`,
             }),
             (0, O.jsx)(`p`, {
               className: `text-sm sm:text-base text-[#667085] mt-3`,
