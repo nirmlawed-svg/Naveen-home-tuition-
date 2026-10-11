@@ -35,7 +35,7 @@ export function Testimonials() {
             }),
             (0, O.jsx)(`h2`, {
               className: `text-2xl sm:text-3xl lg:text-4xl font-bold text-[#101828] mt-3`,
-              children: `What Parents & Tutors Say`,
+              children: `testnimionls`,
             }),
             (0, O.jsx)(`p`, {
               className: `text-sm sm:text-base text-[#667085] mt-2.5`,

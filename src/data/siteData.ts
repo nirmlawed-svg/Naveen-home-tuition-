@@ -223,6 +223,7 @@ export function getCallUrl(): string {
 export function generateParentInquiryWhatsAppUrl(formData: Record<string, string>): string {
   const lines = [
     'Hello Naveen Home Tuitions,',
+    formData.referenceId ? `(Reference ID: ${formData.referenceId})` : '',
     '',
     'I would like to find a tutor.',
     '',
@@ -238,13 +239,14 @@ export function generateParentInquiryWhatsAppUrl(formData: Record<string, string
     `Additional Requirements: ${formData.additionalRequirements || 'None'}`,
     '',
     'Please contact me regarding suitable tuition options.',
-  ];
+  ].filter(line => line !== null && line !== undefined);
   return `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(lines.join('\n'))}`;
 }
 
 export function generateTutorApplicationWhatsAppUrl(formData: Record<string, string>): string {
   const lines = [
     'Hello Naveen Home Tuitions,',
+    formData.referenceId ? `(Reference ID: ${formData.referenceId})` : '',
     '',
     'I would like to register as a tutor.',
     '',
@@ -265,13 +267,14 @@ export function generateTutorApplicationWhatsAppUrl(formData: Record<string, str
     `Additional Information: ${formData.additionalInformation || 'None'}`,
     '',
     'Please contact me regarding tutor opportunities.',
-  ];
+  ].filter(line => line !== null && line !== undefined);
   return `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(lines.join('\n'))}`;
 }
 
 export function generateGeneralContactWhatsAppUrl(formData: Record<string, string>): string {
   const lines = [
     'Hello Naveen Home Tuitions,',
+    formData.referenceId ? `(Reference ID: ${formData.referenceId})` : '',
     '',
     `Name: ${formData.name || 'Not specified'}`,
     `Phone: ${formData.phone || 'Not specified'}`,
@@ -279,7 +282,7 @@ export function generateGeneralContactWhatsAppUrl(formData: Record<string, strin
     `Message: ${formData.message || 'Enquiry regarding tuition services.'}`,
     '',
     'Please contact me regarding my enquiry.',
-  ];
+  ].filter(line => line !== null && line !== undefined);
   return `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(lines.join('\n'))}`;
 }
 

@@ -9,6 +9,7 @@ import {
   getWhatsAppUrl as f,
   getCallUrl as p,
   generateParentInquiryWhatsAppUrl as m,
+  generateParentInquiryWhatsAppUrl,
   generateTutorApplicationWhatsAppUrl as h,
   generateGeneralContactWhatsAppUrl as g,
   validateIndianMobile as gt
@@ -24,6 +25,7 @@ import { submitEnquiry } from "../data/enquiriesDb";
 
 export function ParentsPage({ onNavigate: e }: { onNavigate: (route: string) => void }) {
   const [submitting, setSubmitting] = useState(false);
+  const [submittedWaUrl, setSubmittedWaUrl] = useState<string | null>(null);
   const [t, n] = useState<Record<string, string>>({
     parentName: ``,
     mobileNumber: ``,
@@ -152,7 +154,7 @@ export function ParentsPage({ onNavigate: e }: { onNavigate: (route: string) => 
               className: `max-w-2xl mx-auto bg-white rounded-2xl p-6 sm:p-10 border-2 border-emerald-300 shadow-md text-center`,
               children: [
                 (0, O.jsx)(`div`, {
-                  className: `w-16 h-16 rounded-full bg-emerald-100 text-[#12B76A] flex items-center justify-center mx-auto mb-5`,
+                  className: `w-16 h-16 rounded-full bg-emerald-100 text-[#12B76A] flex items-center justify-center mx-auto mb-5 animate-bounce`,
                   children: (0, O.jsx)(fe, {
                     className: `w-8 h-8 stroke-[2.5]`,
                   }),
@@ -284,9 +286,20 @@ export function ParentsPage({ onNavigate: e }: { onNavigate: (route: string) => 
                 (0, O.jsxs)(`div`, {
                   className: `flex flex-col sm:flex-row items-center justify-center gap-3`,
                   children: [
+                    (0, O.jsxs)(`a`, {
+                      href: submittedWaUrl || generateParentInquiryWhatsAppUrl({ ...t, referenceId: a || '' }),
+                      target: `_blank`,
+                      rel: `noopener noreferrer`,
+                      className: `w-full sm:w-auto px-6 py-2.5 rounded-lg bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer`,
+                      children: [
+                        (0, O.jsx)(E, { className: `w-4 h-4 fill-white` }),
+                        `Continue to WhatsApp (+91 95052 03418)`,
+                      ],
+                    }),
                     (0, O.jsx)(`button`, {
                       onClick: () => {
                         (o(null),
+                          setSubmittedWaUrl(null),
                           n({
                             parentName: ``,
                             mobileNumber: ``,
@@ -364,8 +377,18 @@ export function ParentsPage({ onNavigate: e }: { onNavigate: (route: string) => 
                         setSubmitting(true);
                         try {
                           const res = await submitEnquiry('parent', t);
+                          const waUrl = generateParentInquiryWhatsAppUrl({
+                            ...t,
+                            referenceId: res.id || 'SUBMITTED',
+                          });
+                          setSubmittedWaUrl(waUrl);
                           o(res.id || 'SUBMITTED');
                           window.scrollTo({ top: 0, behavior: 'smooth' });
+                          try {
+                            window.open(waUrl, '_blank');
+                          } catch (popupErr) {
+                            console.info('WhatsApp popup launch handled:', popupErr);
+                          }
                         } catch (err: any) {
                           i((prev) => ({
                             ...prev,

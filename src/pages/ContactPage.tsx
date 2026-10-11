@@ -11,6 +11,7 @@ import {
   generateParentInquiryWhatsAppUrl as m,
   generateTutorApplicationWhatsAppUrl as h,
   generateGeneralContactWhatsAppUrl as g,
+  generateGeneralContactWhatsAppUrl,
   validateIndianMobile as gt
 } from "../data/siteData";
 import {
@@ -24,6 +25,7 @@ import { submitEnquiry } from "../data/enquiriesDb";
 
 export function ContactPage({ onNavigate: e }: { onNavigate: (route: string) => void }) {
   const [submitting, setSubmitting] = useState(false);
+  const [submittedWaUrl, setSubmittedWaUrl] = useState<string | null>(null);
   const [t, n] = useState<Record<string, string>>({ name: ``, phone: ``, email: ``, message: `` });
   const [r, i] = useState<Record<string, string>>({});
   const [a, o] = useState<string | null>(null);
@@ -263,7 +265,7 @@ export function ContactPage({ onNavigate: e }: { onNavigate: (route: string) => 
                       className: `py-6 text-center space-y-4`,
                       children: [
                         (0, O.jsx)(`div`, {
-                          className: `w-14 h-14 rounded-full bg-emerald-100 text-[#12B76A] flex items-center justify-center mx-auto`,
+                          className: `w-14 h-14 rounded-full bg-emerald-100 text-[#12B76A] flex items-center justify-center mx-auto animate-bounce`,
                           children: (0, O.jsx)(fe, {
                             className: `w-7 h-7 stroke-[2.5]`,
                           }),
@@ -283,22 +285,35 @@ export function ContactPage({ onNavigate: e }: { onNavigate: (route: string) => 
                             `. Our academic coordinator will contact you promptly.`,
                           ],
                         }),
-                        (0, O.jsx)(`div`, {
-                          className: `pt-2 flex justify-center`,
-                          children: (0, O.jsx)(`button`, {
-                            onClick: () => {
-                              (o(null),
-                                n({
-                                  name: ``,
-                                  phone: ``,
-                                  email: ``,
-                                  message: ``,
-                                }),
-                                i({}));
-                            },
-                            className: `px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors cursor-pointer`,
-                            children: `Send Another Message`,
-                          }),
+                        (0, O.jsxs)(`div`, {
+                          className: `pt-2 flex flex-col sm:flex-row items-center justify-center gap-3`,
+                          children: [
+                            (0, O.jsxs)(`a`, {
+                              href: submittedWaUrl || generateGeneralContactWhatsAppUrl({ ...t, referenceId: a || '' }),
+                              target: `_blank`,
+                              rel: `noopener noreferrer`,
+                              className: `w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer`,
+                              children: [
+                                (0, O.jsx)(E, { className: `w-4 h-4 fill-white` }),
+                                `Continue to WhatsApp (+91 95052 03418)`,
+                              ],
+                            }),
+                            (0, O.jsx)(`button`, {
+                              onClick: () => {
+                                (o(null),
+                                  setSubmittedWaUrl(null),
+                                  n({
+                                    name: ``,
+                                    phone: ``,
+                                    email: ``,
+                                    message: ``,
+                                  }),
+                                  i({}));
+                              },
+                              className: `w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors cursor-pointer`,
+                              children: `Send Another Message`,
+                            }),
+                          ],
                         }),
                       ],
                     })
@@ -309,7 +324,17 @@ export function ContactPage({ onNavigate: e }: { onNavigate: (route: string) => 
                         setSubmitting(true);
                         try {
                           const res = await submitEnquiry('contact', t);
+                          const waUrl = generateGeneralContactWhatsAppUrl({
+                            ...t,
+                            referenceId: res.id || 'SUBMITTED',
+                          });
+                          setSubmittedWaUrl(waUrl);
                           o(res.id || 'SUBMITTED');
+                          try {
+                            window.open(waUrl, '_blank');
+                          } catch (popupErr) {
+                            console.info('WhatsApp popup launch handled:', popupErr);
+                          }
                         } catch (err: any) {
                           i((prev) => ({
                             ...prev,
